@@ -522,6 +522,95 @@ a { color: inherit; text-decoration: none; }
 .footer-links a:hover { color: var(--paper); }
 
 /* ------------------------------------------------------------------ */
+/* "See how it works" button                                           */
+/* ------------------------------------------------------------------ */
+
+.btn-how {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    color: var(--ink-muted);
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.btn-how:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+}
+
+/* ------------------------------------------------------------------ */
+/* YouTube video modal                                                 */
+/* ------------------------------------------------------------------ */
+
+.video-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.72);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.video-modal-overlay.is-open {
+    display: flex;
+}
+
+.video-modal-box {
+    position: relative;
+    width: 100%;
+    max-width: 860px;
+    background: var(--ink);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+}
+
+.video-modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.video-modal-close:hover { background: rgba(255, 255, 255, 0.3); }
+
+.video-modal-embed {
+    position: relative;
+    padding-top: 56.25%;
+}
+
+.video-modal-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ------------------------------------------------------------------ */
 /* Legal pages (terms, privacy)                                        */
 /* ------------------------------------------------------------------ */
 
