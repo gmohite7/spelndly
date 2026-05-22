@@ -1,6 +1,7 @@
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
+from database.db import get_db, init_db, seed_db, create_user, get_user_by_email, get_user_by_id, get_expenses_by_user
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key"
@@ -85,7 +86,41 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    return "Profile page — coming in Step 4"
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    user     = get_user_by_id(session["user_id"])
+    expenses = get_expenses_by_user(session["user_id"])
+
+    total_spent = sum(e["amount"] for e in expenses)
+    total_count = len(expenses)
+
+    category_totals = {}
+    for e in expenses:
+        category_totals[e["category"]] = category_totals.get(e["category"], 0) + e["amount"]
+
+    top_category = max(category_totals, key=category_totals.get) if category_totals else "—"
+
+    parts = user["name"].split()
+    initials = (parts[0][0] + (parts[1][0] if len(parts) > 1 else "")).upper()
+
+    try:
+        member_since = datetime.strptime(user["created_at"][:10], "%Y-%m-%d").strftime("%-d %b %Y")
+    except (ValueError, TypeError):
+        member_since = user["created_at"][:10] if user["created_at"] else "—"
+
+    recent_expenses = expenses[:5]
+
+    return render_template("profile.html",
+        user=user,
+        initials=initials,
+        member_since=member_since,
+        total_spent=total_spent,
+        total_count=total_count,
+        top_category=top_category,
+        category_totals=category_totals,
+        recent_expenses=recent_expenses,
+    )
 
 
 @app.route("/expenses/add")

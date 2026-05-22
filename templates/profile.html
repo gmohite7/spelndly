@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Profile — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+    <div class="profile-inner">
+
+        <!-- Profile header card -->
+        <div class="profile-header-card">
+            <div class="profile-avatar">{{ initials }}</div>
+            <div class="profile-info">
+                <h2 class="profile-name">{{ user.name }}</h2>
+                <p class="profile-email">{{ user.email }}</p>
+                <p class="profile-since">Member since {{ member_since }}</p>
+            </div>
+        </div>
+
+        <!-- Summary stat cards -->
+        <div class="profile-stats-row">
+            <div class="profile-stat-card">
+                <span class="psc-label">Total Spent</span>
+                <span class="psc-value">&#8377;{{ "%.2f"|format(total_spent) }}</span>
+            </div>
+            <div class="profile-stat-card">
+                <span class="psc-label">Transactions</span>
+                <span class="psc-value">{{ total_count }}</span>
+            </div>
+            <div class="profile-stat-card">
+                <span class="psc-label">Top Category</span>
+                <span class="psc-value">{{ top_category }}</span>
+            </div>
+        </div>
+
+        <!-- Bottom two-column layout -->
+        <div class="profile-bottom-grid">
+
+            <!-- Recent Transactions -->
+            <div class="profile-section">
+                <h3 class="profile-section-title">Recent Transactions</h3>
+                {% if recent_expenses %}
+                <div class="profile-table-wrap">
+                    <table class="profile-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th class="amount-col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in recent_expenses %}
+                            <tr>
+                                <td class="date-col">{{ e.date }}</td>
+                                <td>{{ e.description or "—" }}</td>
+                                <td>
+                                    <span class="expense-badge badge-{{ e.category|lower }}">{{ e.category }}</span>
+                                </td>
+                                <td class="amount-col">&#8377;{{ "%.2f"|format(e.amount) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="profile-empty">No expenses yet. <a href="{{ url_for('add_expense') }}">Add your first one.</a></p>
+                {% endif %}
+            </div>
+
+            <!-- By Category -->
+            <div class="profile-section">
+                <h3 class="profile-section-title">By Category</h3>
+                {% if category_totals %}
+                {% set max_amt = category_totals.values()|max %}
+                <div class="profile-categories">
+                    {% for cat, amt in category_totals.items()|sort(attribute=1, reverse=True) %}
+                    <div class="profile-cat-block">
+                        <div class="profile-cat-header">
+                            <span class="profile-cat-name">{{ cat }}</span>
+                            <span class="profile-cat-amount">&#8377;{{ "%.2f"|format(amt) }}</span>
+                        </div>
+                        <div class="profile-bar-track">
+                            <div class="profile-bar bar-{{ cat|lower }}" style="width: {{ (amt / max_amt * 100)|round }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="profile-empty">No expenses yet.</p>
+                {% endif %}
+            </div>
+
+        </div><!-- /.profile-bottom-grid -->
+    </div>
+</div>
+{% endblock %}

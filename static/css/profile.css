@@ -1,0 +1,344 @@
+/* ------------------------------------------------------------------ */
+/* Category color palette                                              */
+/* ------------------------------------------------------------------ */
+:root {
+    --cat-food:                #1a472a;
+    --cat-food-light:          #e8f0eb;
+    --cat-transport:           #c17f24;
+    --cat-transport-light:     #fdf3e3;
+    --cat-bills:               #2563eb;
+    --cat-bills-light:         #dbeafe;
+    --cat-health:              #dc2626;
+    --cat-health-light:        #fee2e2;
+    --cat-entertainment:       #7c3aed;
+    --cat-entertainment-light: #ede9fe;
+    --cat-shopping:            #d97706;
+    --cat-shopping-light:      #fef3c7;
+    --cat-other:               #6b7280;
+    --cat-other-light:         #f3f4f6;
+}
+
+/* ------------------------------------------------------------------ */
+/* Page wrapper                                                        */
+/* ------------------------------------------------------------------ */
+.profile-page {
+    padding: 3rem 2rem 5rem;
+    background: var(--paper);
+}
+
+.profile-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Profile header card                                                 */
+/* ------------------------------------------------------------------ */
+.profile-header-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2rem 2.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper-card);
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.profile-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+}
+
+.profile-email {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+}
+
+.profile-since {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    margin-top: 0.15rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Summary stat cards                                                  */
+/* ------------------------------------------------------------------ */
+.profile-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.profile-stat-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.psc-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+}
+
+.psc-value {
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------ */
+/* Bottom two-column grid                                              */
+/* ------------------------------------------------------------------ */
+.profile-bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+/* ------------------------------------------------------------------ */
+/* Section card                                                        */
+/* ------------------------------------------------------------------ */
+.profile-section {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 2rem;
+}
+
+.profile-section-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Transactions table                                                  */
+/* ------------------------------------------------------------------ */
+.profile-table-wrap {
+    overflow-x: auto;
+}
+
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.profile-table th {
+    text-align: left;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0 0.75rem 0.875rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.profile-table th.amount-col {
+    text-align: right;
+}
+
+.profile-table td {
+    padding: 0.875rem 0.75rem;
+    border-bottom: 1px solid var(--border-soft);
+    color: var(--ink-soft);
+    vertical-align: middle;
+}
+
+.profile-table tr:last-child td {
+    border-bottom: none;
+}
+
+.profile-table tbody tr:hover td {
+    background: var(--paper);
+}
+
+.date-col {
+    white-space: nowrap;
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+}
+
+.amount-col {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Category badges                                                     */
+/* ------------------------------------------------------------------ */
+.expense-badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    background: var(--border-soft);
+    color: var(--ink-muted);
+}
+
+.badge-food          { background: var(--cat-food-light);          color: var(--cat-food); }
+.badge-transport     { background: var(--cat-transport-light);     color: var(--cat-transport); }
+.badge-bills         { background: var(--cat-bills-light);         color: var(--cat-bills); }
+.badge-health        { background: var(--cat-health-light);        color: var(--cat-health); }
+.badge-entertainment { background: var(--cat-entertainment-light); color: var(--cat-entertainment); }
+.badge-shopping      { background: var(--cat-shopping-light);      color: var(--cat-shopping); }
+.badge-other         { background: var(--cat-other-light);         color: var(--cat-other); }
+
+/* ------------------------------------------------------------------ */
+/* Category breakdown                                                  */
+/* ------------------------------------------------------------------ */
+.profile-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.profile-cat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.profile-cat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.profile-cat-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.profile-cat-amount {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.profile-bar-track {
+    height: 5px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.profile-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+}
+
+.bar-food          { background: var(--cat-food); }
+.bar-transport     { background: var(--cat-transport); }
+.bar-bills         { background: var(--cat-bills); }
+.bar-health        { background: var(--cat-health); }
+.bar-entertainment { background: var(--cat-entertainment); }
+.bar-shopping      { background: var(--cat-shopping); }
+.bar-other         { background: var(--cat-other); }
+
+/* ------------------------------------------------------------------ */
+/* Empty state                                                         */
+/* ------------------------------------------------------------------ */
+.profile-empty {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+}
+
+.profile-empty a {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.profile-empty a:hover {
+    text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width: 900px) {
+    .profile-bottom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .profile-stats-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .profile-stat-card:last-child {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-page {
+        padding: 2rem 1rem 4rem;
+    }
+
+    .profile-header-card {
+        padding: 1.5rem;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-stat-card:last-child {
+        grid-column: auto;
+    }
+
+    .psc-value {
+        font-size: 1.75rem;
+    }
+}
