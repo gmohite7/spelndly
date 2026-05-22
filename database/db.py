@@ -85,3 +85,21 @@ def create_user(name, email, password_hash):
     user_id = cursor.lastrowid
     conn.close()
     return user_id
+
+
+def get_user_by_id(user_id):
+    conn = get_db()
+    user = conn.execute(
+        "SELECT id, name, email, created_at FROM users WHERE id = ?", (user_id,)
+    ).fetchone()
+    conn.close()
+    return user
+
+
+def get_expenses_by_user(user_id):
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC", (user_id,)
+    ).fetchall()
+    conn.close()
+    return rows
