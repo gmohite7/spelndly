@@ -75,17 +75,16 @@
             <!-- By Category -->
             <div class="profile-section">
                 <h3 class="profile-section-title">By Category</h3>
-                {% if category_totals %}
-                {% set max_amt = category_totals.values()|max %}
+                {% if category_breakdown %}
                 <div class="profile-categories">
-                    {% for cat, amt in category_totals.items()|sort(attribute=1, reverse=True) %}
+                    {% for item in category_breakdown %}
                     <div class="profile-cat-block">
                         <div class="profile-cat-header">
-                            <span class="profile-cat-name">{{ cat }}</span>
-                            <span class="profile-cat-amount">&#8377;{{ "%.2f"|format(amt) }}</span>
+                            <span class="profile-cat-name">{{ item.name }}</span>
+                            <span class="profile-cat-amount">&#8377;{{ "%.2f"|format(item.amount) }}</span>
                         </div>
                         <div class="profile-bar-track">
-                            <div class="profile-bar bar-{{ cat|lower }}" style="width: {{ (amt / max_amt * 100)|round }}%"></div>
+                            <div class="profile-bar bar-{{ item.name|lower }}" style="width: {{ item.pct }}%"></div>
                         </div>
                     </div>
                     {% endfor %}
