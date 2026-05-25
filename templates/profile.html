@@ -20,6 +20,30 @@
             </div>
         </div>
 
+        <!-- Date filter -->
+        <div class="profile-filter-card">
+            <div class="profile-filter-bar">
+                <a href="{{ url_for('profile', preset='all') }}"
+                   class="filter-pill {% if active_preset == 'all' %}filter-pill--active{% endif %}">All Time</a>
+                <a href="{{ url_for('profile', preset='this_month') }}"
+                   class="filter-pill {% if active_preset == 'this_month' %}filter-pill--active{% endif %}">This Month</a>
+                <a href="{{ url_for('profile', preset='3months') }}"
+                   class="filter-pill {% if active_preset == '3months' %}filter-pill--active{% endif %}">Last 3 Months</a>
+                <a href="{{ url_for('profile', preset='6months') }}"
+                   class="filter-pill {% if active_preset == '6months' %}filter-pill--active{% endif %}">Last 6 Months</a>
+
+                <form method="GET" action="{{ url_for('profile') }}" class="filter-custom-form">
+                    <input type="hidden" name="preset" value="custom">
+                    <input type="date" name="date_from" class="filter-date-input"
+                           value="{{ custom_from }}" required>
+                    <span class="filter-date-sep">to</span>
+                    <input type="date" name="date_to" class="filter-date-input"
+                           value="{{ custom_to }}" required>
+                    <button type="submit" class="filter-pill filter-pill--active">Apply</button>
+                </form>
+            </div>
+        </div>
+
         <!-- Summary stat cards -->
         <div class="profile-stats-row">
             <div class="profile-stat-card">
