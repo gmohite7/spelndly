@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-page">
+    <div class="analytics-inner">
+        <div class="analytics-coming-soon">
+            <div class="acs-icon-wrap">
+                <i data-lucide="bar-chart-2" class="acs-icon"></i>
+            </div>
+            <span class="acs-badge">Coming Soon</span>
+            <h1 class="acs-heading">Analytics</h1>
+            <p class="acs-desc">
+                Powerful insights into your spending habits are on the way.
+                Track trends, visualize your finances, and make smarter decisions.
+            </p>
+            <div class="acs-features">
+                <div class="acs-feature">
+                    <i data-lucide="trending-up"></i>
+                    <span>Spending trends over time</span>
+                </div>
+                <div class="acs-feature">
+                    <i data-lucide="pie-chart"></i>
+                    <span>Category breakdown charts</span>
+                </div>
+                <div class="acs-feature">
+                    <i data-lucide="calendar"></i>
+                    <span>Monthly &amp; weekly reports</span>
+                </div>
+                <div class="acs-feature">
+                    <i data-lucide="target"></i>
+                    <span>Budget goals &amp; alerts</span>
+                </div>
+            </div>
+            <a href="{{ url_for('profile') }}" class="btn-primary acs-back-btn">Back to Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
