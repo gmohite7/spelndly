@@ -103,3 +103,14 @@ def get_expenses_by_user(user_id):
     ).fetchall()
     conn.close()
     return rows
+
+
+def insert_expense(user_id, amount, category, date, description):
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO expenses (user_id, amount, category, date, description)"
+        " VALUES (?, ?, ?, ?, ?)",
+        (user_id, amount, category, date, description),
+    )
+    conn.commit()
+    conn.close()
