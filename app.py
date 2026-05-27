@@ -1,15 +1,18 @@
 import calendar
+import os
 from datetime import date, datetime
 
 from flask import Flask, flash, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
+from database.db import get_db, init_db, seed_db, create_user, get_user_by_email, insert_expense
 from database.queries import (
     get_user_by_id,
     get_summary_stats,
     get_recent_transactions,
     get_category_breakdown,
 )
+
+EXPENSE_CATEGORIES = ["Food", "Transport", "Bills", "Health", "Entertainment", "Shopping", "Other"]
 
 
 def _months_ago_start(today, n):
@@ -59,11 +62,33 @@ def _resolve_date_filter(args, today):
     return preset, date_from, date_to, custom_from, custom_to
 
 app = Flask(__name__)
-app.secret_key = "dev-secret-key"
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
 with app.app_context():
     init_db()
     seed_db()
+
+
+def _validate_expense_form(amount_raw, category, expense_date):
+    """Returns (error_message, amount) — error is None on success."""
+    try:
+        amount = float(amount_raw)
+        if not (0 < amount < 1_000_000):
+            return "Amount must be between ₹0.01 and ₹10,00,000.", None
+    except ValueError:
+        return "Please enter a valid amount.", None
+
+    if category not in EXPENSE_CATEGORIES:
+        return "Please select a valid category.", None
+
+    try:
+        parsed = datetime.strptime(expense_date, "%Y-%m-%d")
+        if parsed.strftime("%Y-%m-%d") != expense_date:
+            raise ValueError("format mismatch")
+    except ValueError:
+        return "Please enter a valid date (YYYY-MM-DD).", None
+
+    return None, amount
 
 
 # ------------------------------------------------------------------ #
@@ -114,6 +139,7 @@ def login():
     if not user or not check_password_hash(user["password_hash"], password):
         return render_template("login.html", error="Invalid email or password.")
 
+    session.clear()
     session["user_id"]   = user["id"]
     session["user_name"] = user["name"]
     return redirect(url_for("landing"))
@@ -181,9 +207,37 @@ def analytics():
     return render_template("analytics.html")
 
 
-@app.route("/expenses/add")
+@app.route("/expenses/add", methods=["GET", "POST"])
 def add_expense():
-    return "Add expense — coming in Step 7"
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    if request.method == "GET":
+        return render_template("add_expense.html",
+            categories=EXPENSE_CATEGORIES,
+            today=date.today().strftime("%Y-%m-%d"),
+        )
+
+    amount_raw   = request.form.get("amount", "").strip()
+    category     = request.form.get("category", "").strip()
+    expense_date = request.form.get("date", "").strip()
+    description  = request.form.get("description", "").strip() or None
+
+    error, amount = _validate_expense_form(amount_raw, category, expense_date)
+
+    if error:
+        return render_template("add_expense.html",
+            categories=EXPENSE_CATEGORIES,
+            error=error,
+            f_amount=amount_raw,
+            f_category=category,
+            f_date=expense_date,
+            f_description=description,
+        )
+
+    insert_expense(session["user_id"], amount, category, expense_date, description)
+    flash("Expense added.")
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/edit")
@@ -197,4 +251,4 @@ def delete_expense(id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=os.environ.get("FLASK_DEBUG", "0") == "1", port=5001)
