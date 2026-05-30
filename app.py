@@ -2,9 +2,9 @@ import calendar
 import os
 from datetime import date, datetime
 
-from flask import Flask, flash, render_template, request, redirect, url_for, session
+from flask import Flask, abort, flash, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from database.db import get_db, init_db, seed_db, create_user, get_user_by_email, insert_expense
+from database.db import get_db, init_db, seed_db, create_user, get_user_by_email, insert_expense, get_expense_by_id, update_expense
 from database.queries import (
     get_user_by_id,
     get_summary_stats,
@@ -240,9 +240,48 @@ def add_expense():
     return redirect(url_for("profile"))
 
 
-@app.route("/expenses/<int:id>/edit")
+@app.route("/expenses/<int:id>/edit", methods=["GET", "POST"])
 def edit_expense(id):
-    return "Edit expense — coming in Step 8"
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    expense = get_expense_by_id(id)
+    if expense is None:
+        abort(404)
+    if expense["user_id"] != session["user_id"]:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template("edit_expense.html",
+            categories=EXPENSE_CATEGORIES,
+            expense=expense,
+            f_amount=expense["amount"],
+            f_category=expense["category"],
+            f_date=expense["date"],
+            f_description=expense["description"] or "",
+        )
+
+    amount_raw   = request.form.get("amount", "").strip()
+    category     = request.form.get("category", "").strip()
+    expense_date = request.form.get("date", "").strip()
+    description  = request.form.get("description", "").strip() or None
+
+    error, amount = _validate_expense_form(amount_raw, category, expense_date)
+
+    if error:
+        return render_template("edit_expense.html",
+            categories=EXPENSE_CATEGORIES,
+            expense=expense,
+            error=error,
+            f_amount=amount_raw,
+            f_category=category,
+            f_date=expense_date,
+            f_description=description,
+        )
+
+    update_expense(id, amount, category, expense_date, description)
+    flash("Expense updated.")
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/delete")

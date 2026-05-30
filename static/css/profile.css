@@ -277,6 +277,23 @@
     white-space: nowrap;
 }
 
+.actions-col {
+    text-align: right;
+    white-space: nowrap;
+    width: 3rem;
+}
+
+.expense-edit-link {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+}
+
+.expense-edit-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
 /* ------------------------------------------------------------------ */
 /* Category badges                                                     */
 /* ------------------------------------------------------------------ */

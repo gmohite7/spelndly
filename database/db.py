@@ -114,3 +114,22 @@ def insert_expense(user_id, amount, category, date, description):
     )
     conn.commit()
     conn.close()
+
+
+def get_expense_by_id(expense_id):
+    conn = get_db()
+    row = conn.execute(
+        "SELECT * FROM expenses WHERE id = ?", (expense_id,)
+    ).fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+
+def update_expense(expense_id, amount, category, date, description):
+    conn = get_db()
+    conn.execute(
+        "UPDATE expenses SET amount=?, category=?, date=?, description=? WHERE id=?",
+        (amount, category, date, description, expense_id),
+    )
+    conn.commit()
+    conn.close()
