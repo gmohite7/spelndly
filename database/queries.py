@@ -53,7 +53,7 @@ def get_summary_stats(user_id, date_from=None, date_to=None):
 
 def get_recent_transactions(user_id, limit=10, date_from=None, date_to=None):
     sql = (
-        "SELECT date, description, category, amount "
+        "SELECT id, date, description, category, amount "
         "FROM expenses WHERE user_id = ?"
     )
     params = [user_id]
@@ -72,6 +72,7 @@ def get_recent_transactions(user_id, limit=10, date_from=None, date_to=None):
     conn.close()
     return [
         {
+            "id": row["id"],
             "date": row["date"],
             "description": row["description"],
             "category": row["category"],
